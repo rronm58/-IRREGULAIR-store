@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Irregulair | Breathe Irregularly</title>
+    <style>
+        :root {
+            --primary: #1e293b;
+            --brand-blue: #b0d4e3; 
+            --accent-silver: #e2e8f0;
+            --premium-sky: #f0f9ff;
+            --text-main: #334155;
+            --white: #ffffff;
+        }
+
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; margin: 0; color: var(--text-main); background-color: var(--white); overflow-x: hidden; }
+
+        nav { background: rgba(255, 255, 255, 0.9); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--accent-silver); backdrop-filter: blur(5px); }
+        .logo-img { height: 50px; width: auto; }
+        
+        .cart-btn { background: none; border: none; cursor: pointer; position: relative; font-size: 1.5rem; }
+        .cart-count { background: var(--brand-blue); color: var(--primary); border-radius: 50%; padding: 2px 7px; font-size: 0.7rem; position: absolute; top: -5px; right: -8px; font-weight: bold; }
+
+        #cart-drawer { position: fixed; right: -400px; top: 0; width: 350px; height: 100%; background: var(--white); box-shadow: -10px 0 30px rgba(0,0,0,0.1); z-index: 2000; transition: 0.4s; padding: 2rem; display: flex; flex-direction: column; }
+        #cart-drawer.open { right: 0; }
+        #cart-list { flex-grow: 1; overflow-y: auto; list-style: none; padding: 1rem 0; margin: 0; }
+        .cart-item { display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--premium-sky); }
+
+        header { background: var(--premium-sky); padding: 5rem 5%; text-align: center; }
+        .hero-h1 { font-size: 3rem; letter-spacing: 0.2em; color: var(--primary); margin: 0; font-weight: 300; }
+        .hero-slogan { letter-spacing: 0.4em; color: var(--brand-blue); text-transform: uppercase; margin-top: 10px; font-size: 0.9rem; }
+
+        .container { max-width: 1200px; margin: auto; padding: 4rem 2rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2.5rem; }
+        .card { border: 1px solid var(--accent-silver); border-radius: 8px; padding: 1.5rem; text-align: center; transition: 0.3s; background: white; }
+        .card img { max-width: 100%; height: 220px; object-fit: contain; margin-bottom: 1rem; }
+        .price { font-size: 1.2rem; font-weight: 600; margin: 1rem 0; color: var(--primary); }
+
+        .btn { padding: 1rem; width: 100%; border: none; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: 0.3s; border-radius: 4px; }
+        .btn-add { background: var(--primary); color: white; }
+        .btn-add:hover { background: var(--brand-blue); color: var(--primary); }
+        .btn-checkout { background: var(--brand-blue); color: var(--primary); margin-top: 1rem; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <img src="new-brand-logo-2.png" alt="Irregulair" class="logo-img">
+        <button class="cart-btn" onclick="toggleCart()">🛒 <span id="badge" class="cart-count">0</span></button>
+    </nav>
+
+    <header>
+        <h1 class="hero-h1">IRREGULAIR</h1>
+        <div class="hero-slogan">Breathe Irregularly.</div>
+    </header>
+
+    <div class="container">
+        <div class="grid">
+            <div class="card">
+                <img src="drift-pillow.png">
+                <h3>The Drift</h3>
+                <div class="price">$17,000 JMD</div>
+                <button class="btn btn-add" onclick="addToCart('The Drift', 17000)">Add to Cart</button>
+            </div>
+            <div class="card">
+                <img src="thesis-pillow.png">
+                <h3>The Thesis</h3>
+                <div class="price">$28,000 JMD</div>
+                <button class="btn btn-add" onclick="addToCart('The Thesis', 28000)">Add to Cart</button>
+            </div>
+            <div class="card">
+                <img src="void-pillow.png">
+                <h3>The Void</h3>
+                <div class="price">$15,500 JMD</div>
+                <button class="btn btn-add" onclick="addToCart('The Void', 15500)">Add to Cart</button>
+            </div>
+            <div class="card">
+                <img src="nexus-pillow.png">
+                <h3>The Nexus</h3>
+                <div class="price">$7,500 JMD</div>
+                <button class="btn btn-add" onclick="addToCart('The Nexus', 7500)">Add to Cart</button>
+            </div>
+            <div class="card">
+                <img src="pivot-pillow.png">
+                <h3>The Pivot</h3>
+                <div class="price">$18,500 JMD</div>
+                <button class="btn btn-add" onclick="addToCart('The Pivot', 18500)">Add to Cart</button>
+            </div>
+            <div class="card">
+                <img src="transit-pillow.png">
+                <h3>The Transit</h3>
+                <div class="price">$10,500 JMD</div>
+                <button class="btn btn-add" onclick="addToCart('The Transit', 10500)">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="cart-drawer">
+        <h3>Fulfillment</h3>
+        <ul id="cart-list"></ul>
+        <div style="display:flex; justify-content:space-between; font-weight:bold;">
+            <span>Total:</span><span id="cart-total">$0 JMD</span>
+        </div>
+        <button class="btn btn-checkout" onclick="checkout()">Checkout via WhatsApp</button>
+        <button onclick="toggleCart()" style="margin-top:10px; background:none; border:none; cursor:pointer; color:gray;">Close</button>
+    </div>
+
+    <script>
+        let cart = [];
+        function toggleCart() { document.getElementById('cart-drawer').classList.toggle('open'); }
+        function addToCart(name, price) {
+            cart.push({name, price});
+            updateUI();
+            if(!document.getElementById('cart-drawer').classList.contains('open')) toggleCart();
+        }
+        function updateUI() {
+            const list = document.getElementById('cart-list');
+            const total = document.getElementById('cart-total');
+            list.innerHTML = "";
+            let sum = 0;
+            cart.forEach(item => {
+                sum += item.price;
+                list.innerHTML += `<li class="cart-item"><span>${item.name}</span><span>$${item.price.toLocaleString()}</span></li>`;
+            });
+            document.getElementById('badge').innerText = cart.length;
+            total.innerText = `$${sum.toLocaleString()} JMD`;
+        }
+        function checkout() {
+            if (cart.length === 0) return;
+            const orderRef = "IRR-" + Math.floor(1000 + Math.random() * 9000);
+            const total = document.getElementById('cart-total').innerText;
+            alert(`ORDER: ${orderRef}\nTOTAL: ${total}\n\nNCB TRANSFER DETAILS:\nName: ASYM Musculoskeletal\nAcc #: 174401012\n\nPlease send your receipt on WhatsApp.`);
+            const msg = window.encodeURIComponent(`*NEW ORDER ${orderRef}*\nTotal: ${total}\n\nI am sending my NCB receipt now!`);
+            window.open(`https://wa.me/18768755804?text=${msg}`, '_blank');
+        }
+    </script>
+</body>
+</html>
